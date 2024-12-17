@@ -187,6 +187,14 @@
             }
 
             initializeChart() {
+                if (this.containerId === 'temperatureChart') {
+                    this.initializeTemperatureGauge();
+                } else {
+                    this.initializeLineChart();
+                }
+            }
+
+            initializeLineChart() {
                 const ctx = document.getElementById(this.containerId);
                 this.chart = new Chart(ctx, {
                     type: 'line',
@@ -220,14 +228,69 @@
                 });
             }
 
-            updateData(labels, data) {
-                this.chart.data.labels.push(labels[labels.length - 1]); 
-                this.chart.data.datasets[0].data.push(data[data.length - 1]); 
+            initializeTemperatureGauge() {
+                const ctx = document.getElementById(this.containerId);
+                this.chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Temperature'],
+                        datasets: [{
+                            data: [50, 50],
+                            backgroundColor: [
+                                'rgba(126, 63, 255, 0.8)',
+                                'rgba(126, 63, 255, 0.1)'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '80%',
+                        rotation: -90,
+                        circumference: 180,
+                        plugins: {
+                            tooltip: { enabled: false },
+                            legend: { display: false }
+                        }
+                    },
+                    plugins: [{
+                        id: 'temperatureText',
+                        beforeDraw: function(chart) {
+                            const { ctx, chartArea, data } = chart;
+                            const centerX = (chartArea.left + chartArea.right) / 2;
+                            const centerY = (chartArea.bottom + chartArea.top) / 2 + 20;
+                            
+                            const currentTemp = data.datasets[0].data[0].toFixed(2);
+                            
+                            ctx.clearRect(centerX - 50, centerY - 30, 100, 50);
+                            
+                            ctx.font = 'bold 36px Inter, Arial';
+                            ctx.fillStyle = 'var(--primary-color)';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(`${currentTemp}°C`, centerX, centerY);
+                        }
+                    }]
+                });
+            }
 
-                if (this.chart.data.labels.length > 50) {
-                    this.chart.data.labels.shift();
-                    this.chart.data.datasets[0].data.shift();
+            updateData(labels, data) {
+                if (this.containerId === 'temperatureChart') {
+                    this.updateTemperatureGauge(data[data.length - 1]);
+                } else {
+                    this.chart.data.labels.push(labels[labels.length - 1]); 
+                    this.chart.data.datasets[0].data.push(data[data.length - 1]); 
+
+                    if (this.chart.data.labels.length > 50) {
+                        this.chart.data.labels.shift();
+                        this.chart.data.datasets[0].data.shift();
+                    }
+                    this.chart.update();
                 }
+            }
+
+            updateTemperatureGauge(temp) {
+                this.chart.data.datasets[0].data = [temp, 60 - temp];
                 this.chart.update();
             }
         }
@@ -236,8 +299,6 @@
         const temperatureChart = new SensorChart('temperatureChart', 'Temperature (°C)', 60);
         const humidityChart = new SensorChart('humidityChart', 'Humidity (%)', 100);
         const fanSpeedChart = new SensorChart('fanSpeedChart', 'Fan Speed (RPM)', 100, '#4CAF50');
-        const pressureChart = new SensorChart('pressureChart', 'Pressure (bar)', 10, '#FF6384');
-        const tobiChart = new SensorChart('tobiChart', 'Tobi (bar)', 10, '#FF6435');
 
         function updateCharts(data) {
             const now = new Date();
@@ -249,8 +310,6 @@
             temperatureChart.updateData(labels, data.temperature);
             humidityChart.updateData(labels, data.humidity);
             fanSpeedChart.updateData(labels, data.fan_speed);
-            pressureChart.updateData(labels, data.pressure || Array(50).fill(Math.random() * 5)); // Simulated data
-            tobiChart.updateData(labels, data.tobi || Array(50).fill(Math.random() * 5)); // Simulated data
         }
 
         async function fetchData() {
