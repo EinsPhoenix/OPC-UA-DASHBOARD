@@ -10,7 +10,7 @@
             --primary-color: #7e3fff;
             --background-dark: #121212;
             --card-background: #1e1e1e;
-            --text-color: #e0e0e0;
+            --text-color:rgb(255, 255, 255);
             --accent-color: #6a19d6;
         }
 
@@ -79,7 +79,7 @@
         }
 
         .chart-container {
-            height: 250px;
+            height: 300px;
             position: relative;
         }
 
@@ -238,7 +238,7 @@
                             data: [50, 50],
                             backgroundColor: [
                                 'rgba(126, 63, 255, 0.8)',
-                                'rgba(126, 63, 255, 0.1)'
+                                'rgba(24, 0, 71, 0.63)'
                             ],
                             borderWidth: 0
                         }]
@@ -266,7 +266,7 @@
                             ctx.clearRect(centerX - 50, centerY - 30, 100, 50);
                             
                             ctx.font = 'bold 36px Inter, Arial';
-                            ctx.fillStyle = 'var(--primary-color)';
+                            ctx.fillStyle = '#7e3fff';
                             ctx.textAlign = 'center';
                             ctx.fillText(`${currentTemp}°C`, centerX, centerY);
                         }
@@ -281,7 +281,7 @@
                     this.chart.data.labels.push(labels[labels.length - 1]); 
                     this.chart.data.datasets[0].data.push(data[data.length - 1]); 
 
-                    if (this.chart.data.labels.length > 50) {
+                    if (this.chart.data.labels.length > 60) {
                         this.chart.data.labels.shift();
                         this.chart.data.datasets[0].data.shift();
                     }
@@ -295,7 +295,6 @@
             }
         }
 
-        // Initialize charts
         const temperatureChart = new SensorChart('temperatureChart', 'Temperature (°C)', 60);
         const humidityChart = new SensorChart('humidityChart', 'Humidity (%)', 100);
         const fanSpeedChart = new SensorChart('fanSpeedChart', 'Fan Speed (RPM)', 100, '#4CAF50');
@@ -307,8 +306,9 @@
                 return time.toLocaleTimeString();
             });
 
-            temperatureChart.updateData(labels, data.temperature);
+            
             humidityChart.updateData(labels, data.humidity);
+            temperatureChart.updateData(labels, data.temperature);
             fanSpeedChart.updateData(labels, data.fan_speed);
         }
 
@@ -335,7 +335,6 @@
             }
         }
 
-        // Simulated data fetching interval
         setInterval(fetchData, 500);
     </script>
 </body>
