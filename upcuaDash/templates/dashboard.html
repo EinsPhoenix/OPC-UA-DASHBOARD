@@ -452,13 +452,12 @@
             }
         }
 
-        async function setFanSpeed() {
-            const value = document.getElementById("fanSpeedInput").value;
+        async function setFanSpeed(speed) {
             try {
                 await fetch("/api/set_fan_speed/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ fan_speed: value }),
+                    body: JSON.stringify({ fan_speed: speed }),
                 });
             } catch (error) {
                 console.error("Error setting fan speed:", error);
@@ -470,7 +469,7 @@
         document.getElementById('newSlider').addEventListener('input', function (event) {
             const value = event.target.value;
             console.log("New Slider Value: " + value);
-            // Optional: Hier kann Logik hinzugefügt werden, um Werte im Dashboard zu aktualisieren.
+            setFanSpeed(value);
         });
     </script>
 </body>
