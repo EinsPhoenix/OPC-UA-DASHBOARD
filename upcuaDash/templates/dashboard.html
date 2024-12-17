@@ -150,7 +150,7 @@
             <h1 class="dashboard-title">OPC UA Sensor Dashboard</h1>
             <div class="sensor-controls">
                 <div class="control-input">
-                    <input type="number" id="fanSpeedInput" placeholder="Fan Speed" />
+                    <input type="number" id="fanSpeedInput" min="0" max="100" oninput="checkMaxValue(this)" placeholder="Fan Speed" />
                     <button class="btn" onclick="setFanSpeed()">Set Speed</button>
                 </div>
             </div>
@@ -162,6 +162,29 @@
     </div>
 
     <script>
+        function checkMaxValue(input) {
+            const value = parseInt(input.value, 10);
+            const max = parseInt(input.max, 10);
+            const min = parseInt(input.min, 10);
+        
+            if (isNaN(value)) {
+              input.value = "";
+            } else if (value > max) {
+              input.value = max;
+            } else if (value < min) {
+              input.value = min;
+            }
+          }
+        
+          function setFanSpeed() {
+            const fanSpeed = document.getElementById("fanSpeedInput").value;
+            if (fanSpeed === "") {
+              alert("Not valid");
+            } else {
+              alert(`Fan speed: ${fanSpeed}`);
+            }
+          }
+
         class SensorChart {
             constructor(containerId, title, maxValue = 100, color = '#7e3fff') {
                 this.containerId = containerId;
