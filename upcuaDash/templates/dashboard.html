@@ -222,9 +222,9 @@
 
   .slider {
     display: flex;
-    margin: 0;
-    width: auto;
-    top: 130px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50%;
   }
     </style>
 </head>
@@ -286,7 +286,7 @@
           }
 
         class SensorChart {
-            constructor(containerId, title, maxValue = 100, color = '#7e3fff') {
+            constructor(containerId, title, maxValue = 100, color = '#BA0022') {
                 this.containerId = containerId;
                 this.title = title;
                 this.maxValue = maxValue;
