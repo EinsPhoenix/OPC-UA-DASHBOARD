@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced OPC UA Sensor Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #7e3fff;
+            --background-dark: #121212;
+            --card-background: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #6a19d6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Arial', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .sensor-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: scale(1.02);
+        }
+
+        .chart-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+
+        .control-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .control-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-input input {
+            padding: 10px;
+            border: 1px solid #444;
+            background-color: #2a2a2a;
+            color: var(--text-color);
+            border-radius: 6px;
+            width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .control-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(126, 63, 255, 0.2);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sensor-controls {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">OPC UA Sensor Dashboard</h1>
+            <div class="sensor-controls">
+                <div class="control-input">
+                    <input type="number" id="fanSpeedInput" placeholder="Fan Speed" />
+                    <button class="btn" onclick="setFanSpeed()">Set Speed</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="chartsContainer" class="charts-grid">
+            <!-- Charts will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        class SensorChart {
+            constructor(containerId, title, maxValue = 100, color = '#7e3fff') {
+                this.containerId = containerId;
+                this.title = title;
+                this.maxValue = maxValue;
+                this.color = color;
+
+                this.createChartCard();
+                this.initializeChart();
+            }
+
+            createChartCard() {
+                const container = document.getElementById('chartsContainer');
+                const cardHtml = `
+                    <div class="chart-card" id="${this.containerId}-card">
+                        <div class="chart-title">${this.title}</div>
+                        <div class="chart-container">
+                            <canvas id="${this.containerId}"></canvas>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            }
+
+            initializeChart() {
+                const ctx = document.getElementById(this.containerId);
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: { 
+                        labels: Array(50).fill(''),
+                        datasets: [{
+                            data: Array(50).fill(null),
+                            borderColor: this.color,
+                            backgroundColor: this.color + '33',
+                            tension: 0.4
+                        }] 
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 0 },
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: { color: '#e0e0e0' }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: { color: '#e0e0e0' },
+                                suggestedMin: 0,
+                                suggestedMax: this.maxValue
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateData(labels, data) {
+                this.chart.data.labels.push(labels[labels.length - 1]); 
+                this.chart.data.datasets[0].data.push(data[data.length - 1]); 
+
+                if (this.chart.data.labels.length > 50) {
+                    this.chart.data.labels.shift();
+                    this.chart.data.datasets[0].data.shift();
+                }
+                this.chart.update();
+            }
+        }
+
+        // Initialize charts
+        const temperatureChart = new SensorChart('temperatureChart', 'Temperature (°C)', 60);
+        const humidityChart = new SensorChart('humidityChart', 'Humidity (%)', 100);
+        const fanSpeedChart = new SensorChart('fanSpeedChart', 'Fan Speed (RPM)', 100, '#4CAF50');
+        const pressureChart = new SensorChart('pressureChart', 'Pressure (bar)', 10, '#FF6384');
+        const tobiChart = new SensorChart('tobiChart', 'Tobi (bar)', 10, '#FF6435');
+
+        function updateCharts(data) {
+            const now = new Date();
+            const labels = Array.from({ length: data.temperature.length }, (_, i) => {
+                const time = new Date(now.getTime() - (data.temperature.length - 1 - i) * 1000);
+                return time.toLocaleTimeString();
+            });
+
+            temperatureChart.updateData(labels, data.temperature);
+            humidityChart.updateData(labels, data.humidity);
+            fanSpeedChart.updateData(labels, data.fan_speed);
+            pressureChart.updateData(labels, data.pressure || Array(50).fill(Math.random() * 5)); // Simulated data
+            tobiChart.updateData(labels, data.tobi || Array(50).fill(Math.random() * 5)); // Simulated data
+        }
+
+        async function fetchData() {
+            try {
+                const response = await fetch("/api/get_sensor_data/");
+                const data = await response.json();
+                updateCharts(data);
+            } catch (error) {
+                console.error("Error fetching sensor data:", error);
+            }
+        }
+
+        async function setFanSpeed() {
+            const value = document.getElementById("fanSpeedInput").value;
+            try {
+                await fetch("/api/set_fan_speed/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fan_speed: value }),
+                });
+            } catch (error) {
+                console.error("Error setting fan speed:", error);
+            }
+        }
+
+        // Simulated data fetching interval
+        setInterval(fetchData, 500);
+    </script>
+</body>
+</html>
