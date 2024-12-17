@@ -143,20 +143,14 @@
             }
         }
 
-        /* level settings 👇 */
-
 .slider {
     /* slider */
     --slider-width: 100%;
-    --slider-height: 15px;
+    --slider-height: 55px;
     --slider-bg: rgba(82, 82, 82, 0.322);
     --slider-border-radius: 5px;
     /* level */
     --level-transition-duration: 5s;
-    /* icon */
-    --icon-margin: 15px;
-    --icon-color: var(--slider-bg);
-    --icon-size: 30px;
   }
   
   .slider {
@@ -177,7 +171,6 @@
   .slider .volume {
     display: inline-block;
     vertical-align: top;
-    margin-right: var(--icon-margin);
     color: var(--accent-color);
     width: var(--icon-size);
     height: auto;
@@ -205,7 +198,7 @@
   
   .slider .level::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 0px;
+    width: 0px; /* todo das ändern für hight der slidebar innen */
     height: 0px;
     -webkit-box-shadow: -200px 0 0 200px var(--accent-color);
     box-shadow:
