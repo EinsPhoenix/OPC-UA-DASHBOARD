@@ -142,6 +142,98 @@
                 margin-top: 15px;
             }
         }
+
+        /* level settings 👇 */
+
+.slider {
+    /* slider */
+    --slider-width: 100%;
+    --slider-height: 15px;
+    --slider-bg: rgba(82, 82, 82, 0.322);
+    --slider-border-radius: 5px;
+    /* level */
+    --accent-color: #92ff77;
+    --level-transition-duration: 5s;
+    /* icon */
+    --icon-margin: 15px;
+    --icon-color: var(--slider-bg);
+    --icon-size: 30px;
+  }
+  
+  .slider {
+    position: relative;
+    cursor: pointer;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+  
+  .slider .volume {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: var(--icon-margin);
+    color: var(--icon-color);
+    width: var(--icon-size);
+    height: auto;
+    position: absolute;
+    left: 18px;
+    pointer-events: none;
+    transition-duration: 0.5s;
+  }
+  
+  .slider .level {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: var(--slider-width);
+    height: var(--slider-height);
+    background: var(--slider-bg);
+    overflow: hidden;
+    border-radius: var(--slider-border-radius);
+    -webkit-transition: height var(--level-transition-duration);
+    -o-transition: height var(--level-transition-duration);
+    transition: height var(--level-transition-duration);
+    cursor: inherit;
+    transform: rotate(270deg);
+  }
+  
+  .slider .level::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 0px;
+    height: 0px;
+    -webkit-box-shadow: -200px 0 0 200px var(--accent-color);
+    box-shadow:
+      -100px 0 5px 100px var(--accent-color),
+      -100px 0px 20px 100px var(--accent-color);
+  }
+  .slider .level:hover ~ .volume {
+    color: var(--accent-color);
+    opacity: 0.6;
+  }
+  
+  .slider .level::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow:
+      -100px 0 5px 100px var(--accent-color),
+      -100px 0px 20px 100px var(--accent-color);
+  }
+
+  .slider {
+    display: flex;
+    margin: 0;
+    width: auto;
+    top: 130px;
+  }
     </style>
 </head>
 <body>
@@ -150,15 +242,31 @@
             <h1 class="dashboard-title">OPC UA Sensor Dashboard</h1>
             <div class="sensor-controls">
                 <div class="control-input">
-                    <input type="number" id="fanSpeedInput" min="0" max="100" oninput="checkMaxValue(this)" placeholder="Fan Speed" />
-                    <button class="btn" onclick="setFanSpeed()">Set Speed</button>
+                    <!-- <input type="number" id="fanSpeedInput" min="0" max="100" oninput="checkMaxValue(this)" placeholder="Fan Speed" />
+                    <button class="btn" onclick="setFanSpeed()">Set Speed</button> -->
+                    
                 </div>
             </div>
         </div>
 
+        
         <div id="chartsContainer" class="charts-grid">
+            <div class="charts-grid">
+                <!-- <label class="slider">
+                <input type="range" class="level" />
+                </label> -->
+
+                <div class="chart-card">
+                    <div class="chart-title">Fan Controller</div>
+                    <label class="slider">
+                        <input type="range" class="level" id="newSlider" min="0" max="100" value="50" />
+                    </label>
+                </div>
+
+            </div>
             <!-- Charts will be dynamically added here -->
         </div>
+        
     </div>
 
     <script>
@@ -359,6 +467,12 @@
         }
 
         setInterval(fetchData, 500);
+        
+        document.getElementById('newSlider').addEventListener('input', function (event) {
+            const value = event.target.value;
+            console.log("New Slider Value: " + value);
+            // Optional: Hier kann Logik hinzugefügt werden, um Werte im Dashboard zu aktualisieren.
+        });
     </script>
 </body>
 </html>
