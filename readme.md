@@ -57,13 +57,6 @@ Retrieve the Node IDs from your OPC UA server. These will be used to configure t
 - Update the server URL to point to your OPC UA server.
     ![Alt text](./Screenshot%202025-01-13%20075615.png)
 
-### Example Configuration:
-```yaml
-server_url: "opc.tcp://<your-server-ip>:4840"
-node_ids:
-  temperature: "ns=2;s=Temperature"
-  pressure: "ns=2;s=Pressure"
-```
 
 ---
 
@@ -76,5 +69,5 @@ After completing the configuration:
    ```
 2. Open your web browser and navigate to `http://127.0.0.1:8000/` to access the dashboard.
 
----
+
 
