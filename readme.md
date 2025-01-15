@@ -24,7 +24,35 @@ This project serves as an interface for monitoring and managing OPC UA servers v
 ## Setup Instructions
 
 ### 1. Remove Showcase Script
-The `server.py` file provided in the repository is for showcase purposes only. **Delete this file** to avoid confusion.  
+The `server.py` file provided in the repository is for showcase purposes only. **Delete this file** to avoid confusion, and add the following lines to your code:
+
+```bash
+        device = server.nodes.objects.add_object(idx, "Device")
+        
+        
+
+        # Add variables
+        fan_speed = device.add_variable(idx, "FanSpeed", 0.0)
+        temperature = device.add_variable(idx, "Temperature", 0.0)
+        humidity = device.add_variable(idx, "Humidity", 0.0)
+        set_fan_speed = device.add_variable(idx, "SetFanSpeed", 0.0)
+
+        # Make set_fan_speed writable
+        set_fan_speed.set_writable()
+
+        # Create a JSON representation of NodeIds
+        node_ids = {
+            "FanSpeed": fan_speed.nodeid.to_string(),
+            "Temperature": temperature.nodeid.to_string(),
+            "Humidity": humidity.nodeid.to_string(),
+            "SetFanSpeed": set_fan_speed.nodeid.to_string(),
+        }
+        # Add NodeIds JSON as a new variable
+        node_ids_variable = device.add_variable(
+        idx, "NodeIDs", json.dumps(node_ids)
+        )
+        node_ids_variable.set_writable(False)
+```
 
 ### 2. Create a Virtual Environment
 Run the following command to create a virtual environment:
