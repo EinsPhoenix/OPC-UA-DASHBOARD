@@ -75,7 +75,7 @@ async def set_location(request):
                 status=500
             )
 
-       
+        print("Succes")
         return JsonResponse({
             'status': 'success',
             'message': 'Location set successfully',

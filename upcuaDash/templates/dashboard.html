@@ -57,6 +57,12 @@
             gap: 20px;
         }
 
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
         .chart-card {
             background-color: var(--card-background);
             border-radius: 12px;
@@ -111,6 +117,9 @@
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(126, 63, 255, 0.2);
+        }
+        #WeatherInfo {
+            margin-top: 25px;
         }
 
         .btn {
@@ -243,20 +252,33 @@
 
         
         <div id="chartsContainer" class="charts-grid">
-            <div class="charts-grid">
-                <!-- <label class="slider">
-                <input type="range" class="level" />
-                </label> -->
-
-                <div class="chart-card">
-                    <div class="chart-title">Fan Controller</div>
-                    <label class="slider">
-                        <input type="range" class="level" id="newSlider" min="0" max="100" value="50" />
-                    </label>
-                </div>
-
-            </div>
+            
             <!-- Charts will be dynamically added here -->
+            <div class="chart-card">
+                <div class="chart-title">Fan Controller</div>
+                <label class="slider">
+                    <input type="range" class="level" id="newSlider" min="0" max="100" value="50" />
+                </label>
+            </div>
+
+            
+        </div>
+
+        <div id="WeatherInfo" class= "weather-grid">
+            <!-- Weather info will be dynamically added here -->
+            <div class="chart-card" id="weatherChart-card">
+                <div class="chart-title">Weather</div>
+                <div class="chart-container">
+                    <canvas id="weatherChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card" id="currentWeather-card">
+                <div class="chart-title">Current Weather</div>
+                <div class="chart-container">
+                    <canvas id="currentWeather"></canvas>
+                </div>
+            </div>
         </div>
         
     </div>
@@ -291,6 +313,12 @@
               if (!response.ok) {
                 throw new Error('Failed to send location data');
               }
+              else{
+                const responseData = await response.json(); 
+                console.log(responseData); 
+                createWeatherChart(responseData.weather_data); 
+
+              }
           
               console.log('Location sent successfully!');
             } catch (error) {
@@ -316,7 +344,50 @@
           
           // Call the getGeoLocation function when the page loads
           window.onload = getGeoLocation;
-          
+        function createWeatherChart(weatherData){
+            console.log(weatherData);
+            const hourlyData = weatherData.days[0].hours;
+        const labels = hourlyData.map(hour => hour.datetime); // x-axis (time)
+        const temperatures = hourlyData.map(hour => ((hour.temp - 32) * 5) / 9);
+
+        // Create the Chart
+        const ctx = document.getElementById('weatherChart').getContext('2d');
+        const weatherChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: temperatures,
+                    borderColor: '#7e3fff',
+                    backgroundColor: 'rgba(126, 63, 255, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#6a19d6',
+                    pointBorderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 0 },
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: { color: '#e0e0e0' }
+                            },
+                            y: {
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: { color: '#e0e0e0' },
+                                suggestedMin: 0,
+                                suggestedMax: this.maxValue
+                            }
+                        }
+                    }
+        });
+        }
         function checkMaxValue(input) {
             const value = parseInt(input.value, 10);
             const max = parseInt(input.max, 10);
