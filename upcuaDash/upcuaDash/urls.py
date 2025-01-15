@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/get_sensor_data/", views.get_sensor_data, name="get_sensor_data"),
     path("api/set_fan_speed/", views.set_fan_speed, name="set_fan_speed"),
+    path("api/set_location/", views.set_location, name="set_location"),
     path('', views.dashboard_view, name='dashboard'),
 ]

@@ -1,7 +1,8 @@
 from opcua import Server
-from datetime import datetime
 import random
 import asyncio
+import json
+
 
 async def run_server():
     # Create OPC UA Server
@@ -13,10 +14,13 @@ async def run_server():
     uri = "http://example.org"
     idx = server.register_namespace(uri)
 
+
     # Add objects and variables
     try:
         # Create device object
         device = server.nodes.objects.add_object(idx, "Device")
+        
+        
 
         # Add variables
         fan_speed = device.add_variable(idx, "FanSpeed", 0.0)
@@ -26,6 +30,22 @@ async def run_server():
 
         # Make set_fan_speed writable
         set_fan_speed.set_writable()
+
+        # Create a JSON representation of NodeIds
+        node_ids = {
+            "FanSpeed": fan_speed.nodeid.to_string(),
+            "Temperature": temperature.nodeid.to_string(),
+            "Humidity": humidity.nodeid.to_string(),
+            "SetFanSpeed": set_fan_speed.nodeid.to_string(),
+        }
+        # Add NodeIds JSON as a new variable
+        node_ids_variable = device.add_variable(
+        idx, "NodeIDs", json.dumps(node_ids)
+        )
+        node_ids_variable.set_writable(False)
+        
+        print(f"NodeIDs variable created with NodeID: {node_ids}")
+
 
         # Start the server
         server.start()
@@ -45,13 +65,6 @@ async def run_server():
             temperature.set_value(random.uniform(1, 50))
             humidity.set_value(random.uniform(10, 100))
 
-            # Debugging print statements
-            print(f"Device object created: {device}")
-            print(f"FanSpeed variable created: {fan_speed}")
-            print(f"SetFanSpeed variable created: {set_fan_speed}")
-            print(f"Temperature variable created: {temperature}")
-            print(f"Humidity variable created: {humidity}")
-
             # Wait for 1 second
             await asyncio.sleep(1)
 
@@ -60,6 +73,7 @@ async def run_server():
     finally:
         server.stop()
         print("Server stopped.")
+
 
 if __name__ == "__main__":
     asyncio.run(run_server())
