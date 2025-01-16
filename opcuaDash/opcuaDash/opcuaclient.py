@@ -76,7 +76,7 @@ class OPCUAClient:
                 self.data["humidity"].append(self.humidity_node.get_value())
                 self.data["fan_speed"].append(self.fan_speed_node.get_value())
                 
-                # print(self.data)
+             
 
                
                 for key in self.data:
@@ -99,7 +99,7 @@ class OPCUAClient:
         self.client.disconnect()
 
 opc_client = OPCUAClient("opc.tcp://localhost:4840/freeopcua/server/")
- # Thread als Daemon starten
+
 data_thread = threading.Thread(target=opc_client.fetch_data, daemon=True)
 data_thread.start()
 if __name__ == "__main__":

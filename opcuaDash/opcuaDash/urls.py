@@ -1,5 +1,5 @@
 """
-URL configuration for upcuaDash project.
+URL configuration for opcuaDash project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -24,5 +24,8 @@ urlpatterns = [
     path("api/get_sensor_data/", views.get_sensor_data, name="get_sensor_data"),
     path("api/set_fan_speed/", views.set_fan_speed, name="set_fan_speed"),
     path("api/set_location/", views.set_location, name="set_location"),
+    path("api/energyData/", views.get_energy_data, name="get_energy_data"),
+    path("api/energyDrain/", views.energy_consumption, name="get_energy_drain"),
+    path("api/loadCheck/", views.load_request, name="get_load_Server"),
     path('', views.dashboard_view, name='dashboard'),
 ]

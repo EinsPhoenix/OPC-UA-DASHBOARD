@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced OPC UA Sensor Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    
+
+</head>
+<body>
+    
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <h1>OPC UA Dashboard</h1>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-link active">Dashboard</a>
+            <a href="#" class="nav-link">Analytics</a>
+            <a href="#" class="nav-link">Settings</a>
+        </div>
+    </nav>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title"></h1>
+            <div class="sensor-controls">
+                <div class="control-input">
+                    
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="chartsContainer" class="charts-grid">
+            
+            <!-- Charts will be dynamically added here -->
+            <div class="chart-card">
+                <div class="chart-title">Fan Controller</div>
+                <label class="slider">
+                    <input type="range" class="level" id="newSlider" min="0" max="100" value="50" />
+                </label>
+            </div>
+
+            
+        </div>
+
+        <div id="WeatherInfo" class= "weather-grid">
+            <!-- Weather info will be dynamically added here -->
+            <div class="chart-card" id="weatherChart-card">
+                <div class="chart-title">Current Temperature</div>
+                <div class="chart-container">
+                    <canvas id="currentTemp"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card" id="currentWeather-card">
+                <div class="chart-title">Current Humidity</div>
+                <div class="chart-container">
+                    <canvas id="currentHumidity"></canvas>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="WeatherInfo" class= "weather-grid">
+            <!-- Weather info will be dynamically added here -->
+            <div class="chart-card" id="weatherChart-card">
+                <div class="chart-title">Weather</div>
+                <div class="chart-container">
+                    <canvas id="weatherChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="WeatherInfo" class= "weather-grid">
+            <!-- Weather info will be dynamically added here -->
+            <div class="chart-card" id="energy-card">
+                <div class="chart-title">Current Price per hour</div>
+                <div class="chart-container">
+                    <canvas id="currentPrice"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card" id="energy-card">
+                <div class="chart-title">Current Load</div>
+                <div class="chart-container">
+                    <canvas id="currentLoad"></canvas>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="WeatherInfo" class= "weather-grid">
+            <!-- Weather info will be dynamically added here -->
+            <div class="chart-card" id="energy-card">
+                <div class="chart-title">Energy Price</div>
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+
+    {% load static %}
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/energycosts.js' %}"></script>
+    <script>
+        window.onload = function() {
+            getGeoLocation();
+            fetchEnergyData();
+        };
+        
+
+    </script>
+</body>
+</html>

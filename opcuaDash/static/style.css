@@ -1,0 +1,291 @@
+    :root {
+        --primary-color: #7e3fff;
+        --background-dark: #121212;
+        --card-background: #1e1e1e;
+        --text-color: rgb(255, 255, 255);
+        --accent-color: #6a19d6;
+        --nav-height: 60px;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Inter', 'Arial', sans-serif;
+        background-color: var(--background-dark);
+        color: var(--text-color);
+        line-height: 1.6;
+        padding-top: var(--nav-height)
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .sensor-controls {
+        display: flex;
+        gap: 15px;
+    }
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .weather-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .chart-card {
+        background-color: var(--card-background);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+
+    .chart-card:hover {
+        transform: scale(1.02);
+    }
+
+    .chart-title {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .chart-container {
+        height: 300px;
+        position: relative;
+    }
+
+    .control-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .control-input {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .control-input input {
+        padding: 10px;
+        border: 1px solid #444;
+        background-color: #2a2a2a;
+        color: var(--text-color);
+        border-radius: 6px;
+        width: 120px;
+        transition: all 0.3s ease;
+    }
+
+    .control-input input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(126, 63, 255, 0.2);
+    }
+
+    #WeatherInfo {
+        margin-top: 25px;
+    }
+
+    .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+        background-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+
+    .btn:active {
+        transform: translateY(1px);
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sensor-controls {
+            margin-top: 15px;
+        }
+    }
+
+    .slider {
+        /* slider */
+        --slider-width: 100%;
+        --slider-height: 55px;
+        --slider-bg: rgba(82, 82, 82, 0.322);
+        --slider-border-radius: 5px;
+        /* level */
+        --level-transition-duration: 5s;
+    }
+
+    .slider {
+        position: relative;
+        cursor: pointer;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: reverse;
+        -ms-flex-direction: row-reverse;
+        flex-direction: row-reverse;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .slider .volume {
+        display: inline-block;
+        vertical-align: top;
+        color: var(--accent-color);
+        width: var(--icon-size);
+        height: auto;
+        position: absolute;
+        left: 18px;
+        pointer-events: none;
+        transition-duration: 0.5s;
+    }
+
+    .slider .level {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: var(--slider-width);
+        height: var(--slider-height);
+        background: var(--slider-bg);
+        overflow: hidden;
+        border-radius: var(--slider-border-radius);
+        -webkit-transition: height var(--level-transition-duration);
+        -o-transition: height var(--level-transition-duration);
+        transition: height var(--level-transition-duration);
+        cursor: inherit;
+        transform: rotate(270deg);
+    }
+
+    .slider .level::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 0px;
+        /* todo das ändern für hight der slidebar innen */
+        height: 0px;
+        -webkit-box-shadow: -200px 0 0 200px var(--accent-color);
+        box-shadow:
+            -100px 0 5px 100px var(--accent-color),
+            -100px 0px 20px 100px var(--accent-color);
+    }
+
+    .slider .level:hover~.volume {
+        color: var(--accent-color);
+        opacity: 0.6;
+    }
+
+    .slider .level::-moz-range-thumb {
+        width: 0;
+        height: 0;
+        border-radius: 0;
+        border: none;
+        box-shadow:
+            -100px 0 5px 100px var(--accent-color),
+            -100px 0px 20px 100px var(--accent-color);
+    }
+
+    .slider {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50%;
+    }
+
+    .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-height);
+        background-color: var(--card-background);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10rem;
+    }
+
+    .nav-brand img {
+        height: 32px;
+        width: auto;
+    }
+
+    .nav-brand h1 {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .nav-menu {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .nav-link {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .nav-link:hover {
+        color: var(--primary-color);
+        background-color: rgba(126, 63, 255, 0.1);
+    }
+
+    .nav-link.active {
+        color: var(--primary-color);
+    }
