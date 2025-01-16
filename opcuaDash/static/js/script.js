@@ -164,18 +164,40 @@ function initializeTemperatureGaugeCurrent() {
                 const { ctx, chartArea, data } = chart;
                 const centerX = (chartArea.left + chartArea.right) / 2;
                 const centerY = (chartArea.bottom + chartArea.top) / 2 + 20;
-
-                const currentTemp = data.datasets[0].data[0].toFixed(2);
+                // Berechne die tatsächliche Temperatur aus dem normalisierten Wert zurück
+                const minTemp = -50;
+                const maxTemp = 50;
+                const normalizedValue = data.datasets[0].data[0];
+                const actualTemp = ((normalizedValue / 50) * (maxTemp - minTemp) + minTemp).toFixed(1);
 
                 ctx.clearRect(centerX - 50, centerY - 30, 100, 50);
-
                 ctx.font = 'bold 36px Inter, Arial';
                 ctx.fillStyle = '#7e3fff';
                 ctx.textAlign = 'center';
-                ctx.fillText(`${currentTemp}°C`, centerX, centerY);
+                ctx.fillText(`${actualTemp}°C`, centerX, centerY);
             }
         }]
     });
+}
+
+function updateTemperatureGaugeCurrent(temp) {
+    const chart = document.getElementById("currentTemp");
+    if (!chart) {
+        console.error('Chart ist nicht initialisiert');
+        return;
+    }
+
+    const minTemp = -50;
+    const maxTemp = 50;
+
+
+    const normalizedTemp = Math.min(Math.max(temp, minTemp), maxTemp);
+
+
+    const gaugeValue = ((normalizedTemp - minTemp) / (maxTemp - minTemp)) * 50;
+
+    this.chart.data.datasets[0].data = [gaugeValue, 50 - gaugeValue];
+    this.chart.update();
 }
 
 
@@ -240,22 +262,7 @@ function getCurrentTemperature(weatherData) {
     }
 }
 
-function updateTemperatureGaugeCurrent(temp) {
 
-    const chart = document.getElementById("currentTemp");
-    if (!chart) {
-        console.error('Chart ist nicht initialisiert');
-        return;
-    }
-
-
-    const normalizedTemp = Math.min(Math.max(temp, 0), 50);
-
-
-    this.chart.data.datasets[0].data = [normalizedTemp, 50 - normalizedTemp];
-
-    this.chart.update();
-}
 
 
 
