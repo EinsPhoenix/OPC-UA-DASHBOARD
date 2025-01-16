@@ -8,21 +8,29 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
-    
+    <link href="https://fonts.googleapis.com/css2?family=Iceland&display=swap" rel="stylesheet">
 
 </head>
-<body>
+<body>     
     
-    <nav class="top-nav">
-        <div class="nav-brand">
+    <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
             <h1>OPC UA Dashboard</h1>
+          </div>
+          <div class="navbar-menu">
+            <a href="#" class="navbar-item active hover-sound">Dashboard</a>
+            <a href="#" class="navbar-item hover-sound">Analytics</a>
+            <a href="#" class="navbar-item hover-sound">Settings</a>
+          </div>
+          <div class="navbar-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
         </div>
-        <div class="nav-menu">
-            <a href="#" class="nav-link active">Dashboard</a>
-            <a href="#" class="nav-link">Analytics</a>
-            <a href="#" class="nav-link">Settings</a>
-        </div>
-    </nav>
+      </nav>
+
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1 class="dashboard-title"></h1>
@@ -116,6 +124,24 @@
         };
         
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const hoverElements = document.querySelectorAll('.hover-sound');
+            const audio = document.getElementById('hoverAudio');
+          
+            hoverElements.forEach(element => {
+              element.addEventListener('mouseenter', function() {
+                audio.currentTime = 0;
+                audio.play();
+              });
+            });
+          });
+
     </script>
+
+    <audio id="hoverAudio" preload="auto">
+        <source src="{% static 'ui-click-menu-modern-interface-select-medium-230477.mp3' %}" type="audio/mpeg">
+        <source src="{% static 'ui-click-menu-modern-interface-select-medium-230477.wav' %}" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>      
 </body>
 </html>
