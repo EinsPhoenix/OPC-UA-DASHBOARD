@@ -105,3 +105,13 @@ After completing the configuration:
 
 
 
+
+
+
+## TODO: 
+
+- under Analytics add Raspberry vitals
+
+- relative humidity und absolute value temperature
+
+- pop up with our names and a short sentence 
