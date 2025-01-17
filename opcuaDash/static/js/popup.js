@@ -6,11 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function loadRandomQuote() {
         try {
-            console.log("Starte API-Aufruf...");
+
             const response = await fetch('/api/random-sentence');
-            console.log("Antwortstatus:", response.status);
+
             const data = await response.json();
-            console.log("Empfangene Daten:", data);
+
 
             if (data && typeof data === 'object' && 'quote' in data) {
                 quoteText.textContent = data.quote;

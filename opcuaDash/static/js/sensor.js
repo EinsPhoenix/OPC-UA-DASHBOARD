@@ -29,10 +29,10 @@ async function getGeoLocation() {
         }
         else {
             const responseData = await response.json();
-            console.log(responseData);
+
             createWeatherChart(responseData.weather_data);
             weatherDataSaved = responseData.weather_data;
-            console.log(weatherDataSaved);
+
             initializeTemperatureGaugeCurrent();
 
             updateCurrentTemperature(weatherDataSaved);
@@ -70,7 +70,7 @@ function getCookie(name) {
 
 
 function createWeatherChart(weatherData) {
-    console.log(weatherData);
+
     const hourlyData = weatherData.days[0].hours;
     const labels = hourlyData.map(hour => hour.datetime);
     const temperatures = hourlyData.map(hour => ((hour.temp - 32) * 5) / 9);
@@ -599,8 +599,8 @@ async function fetchData() {
             updateCharts(data);
         } else {
             console.error("Failed to fetch data, status:", response.status);
-            console.log("Failed to fetch data, status:", response.data);
-            console.log(response.json());
+
+
         }
     } catch (error) {
         console.error("Error fetching sensor data:", error);

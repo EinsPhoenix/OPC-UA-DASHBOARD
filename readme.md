@@ -111,8 +111,24 @@ After completing the configuration:
 
 
 
+## How to use the Dashboard
+When something makes a sound you can click it.
+S
+1. The slider is at default at 48 when you want the automatic mode slide it down to 0
+![alt text](image.png)
 
+2. The top row is the opc-ua dashboard, its connected to the server and makes an api call to the backend
+![alt text](image-1.png)
 
+3. In the middle there are 3 diagrams which represent the live weather
+![alt text](image-2.png)
+
+4. At the bottom there are 3 diagrams which represent the energy price per hour based on the load, the current load and the energy price per MWH in euro. Here you can click the current load to get a detail-view
+![alt text](image-3.png)
+
+![alt text](image-4.png)
+
+5. You noticed the popup at the beginning its a small reminder, who made this thing and its kind of funny
 
 ## TODO: 
 

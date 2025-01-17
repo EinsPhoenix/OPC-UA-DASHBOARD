@@ -3,7 +3,7 @@
 async function fetchEnergyData() {
     try {
         const data = await fetchPrice();
-        console.log(data);
+
         createPriceChart(data);
         updateCurrentPrice();
 
@@ -30,10 +30,6 @@ async function fetchPrice() {
 async function fetchLoad() {
     const pc_load = await fetch("/api/loadCheck/");
     const pc_load_data = await pc_load.json();
-
-    console.log(pc_load_data);
-
-
     return pc_load_data;
 }
 
@@ -288,7 +284,7 @@ const energyCard = document.getElementById("currentLoad-card");
 energyCard.onclick = function () {
     modal.style.display = "block";
     modal.style.visibility = 'visible';
-    console.log("CLICK");
+
 
 }
 
@@ -317,7 +313,6 @@ function updateLoadGaugeCurrent(load, updateChart) {
 async function updateCurrentLoad() {
     try {
         const load = await fetchLoad();
-        console.log(load);
 
         if (load.status === 'success') {
             updateLoadGaugeCurrent(load.result.current_load, loadChartCurrent);
