@@ -27,5 +27,6 @@ urlpatterns = [
     path("api/energyData/", views.get_energy_data, name="get_energy_data"),
     path("api/energyDrain/", views.energy_consumption, name="get_energy_drain"),
     path("api/loadCheck/", views.load_request, name="get_load_Server"),
+    path('api/random-sentence', views.random_sentence, name='random_sentence'),
     path('', views.dashboard_view, name='dashboard'),
 ]

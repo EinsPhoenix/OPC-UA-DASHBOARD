@@ -12,6 +12,7 @@ from datetime import datetime
 from django.db.models import Q
 from .models import EnergyData
 import psutil
+import random
 
 
 logger = logging.getLogger(__name__)
@@ -233,4 +234,24 @@ async def load_request(request):
 
 
 
+
+async def random_sentence(request):
+    file_path = os.path.join(os.path.dirname(__file__), '../popup.json')
+    
+    try:
+       
+        with open(file_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        
+       
+        quotes = [item["text"] for item in data["quote"]]
+        
+       
+        random_quote = random.choice(quotes)
+        
+        return JsonResponse({"quote": random_quote}, safe=False)
+    except FileNotFoundError:
+        return JsonResponse({"error": "Die Datei 'popup.json' wurde nicht gefunden."}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Fehler beim Lesen der JSON-Datei."}, status=500)
    

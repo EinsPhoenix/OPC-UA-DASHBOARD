@@ -23,6 +23,20 @@
             <a href="#" class="nav-link">Settings</a>
         </div>
     </nav>
+
+    <div id="welcomePopup" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                
+                <p id="quoteText" class="quote">Lade Spruch...</p>
+                <p class="created-by">Created by Noah, Jan , Tobi, David Stock </p>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1 class="dashboard-title"></h1>
@@ -114,8 +128,7 @@
             getGeoLocation();
             fetchEnergyData();
         };
-        
-
     </script>
+    <script src="{% static 'js/popup.js' %}"></script>
 </body>
 </html>
