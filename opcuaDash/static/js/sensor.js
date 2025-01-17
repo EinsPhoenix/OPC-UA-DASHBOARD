@@ -586,10 +586,22 @@ function updateCharts(data) {
 
 async function fetchData() {
     try {
-        const response = await fetch("/api/get_sensor_data/");
-        const data = await response.json();
+        const response = await fetch("http://localhost:5000/data", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-        updateCharts(data);
+        // Check if the response is okay
+        if (response.ok) {
+            const data = await response.json();
+            updateCharts(data);
+        } else {
+            console.error("Failed to fetch data, status:", response.status);
+            console.log("Failed to fetch data, status:", response.data);
+            console.log(response.json());
+        }
     } catch (error) {
         console.error("Error fetching sensor data:", error);
     }
@@ -597,15 +609,21 @@ async function fetchData() {
 
 async function setFanSpeed(speed) {
     try {
-        await fetch("/api/set_fan_speed/", {
+        const response = await fetch("http://localhost:5000/set_fan_speed/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fan_speed: speed }),
+            body: JSON.stringify({ value: speed }),
         });
+
+
+        if (!response.ok) {
+            console.error("Failed to set fan speed, status:", response.status);
+        }
     } catch (error) {
         console.error("Error setting fan speed:", error);
     }
 }
+
 
 setInterval(fetchData, 500);
 setFanSpeed(48);

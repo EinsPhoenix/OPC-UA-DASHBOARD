@@ -21,8 +21,6 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/get_sensor_data/", views.get_sensor_data, name="get_sensor_data"),
-    path("api/set_fan_speed/", views.set_fan_speed, name="set_fan_speed"),
     path("api/set_location/", views.set_location, name="set_location"),
     path("api/energyData/", views.get_energy_data, name="get_energy_data"),
     path("api/energyDrain/", views.energy_consumption, name="get_energy_drain"),

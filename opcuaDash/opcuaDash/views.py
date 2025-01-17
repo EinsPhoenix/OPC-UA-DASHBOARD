@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .opcuaclient import opc_client
+import requests
 from django.shortcuts import render
 import requests
 from dotenv import load_dotenv
@@ -16,9 +16,6 @@ import random
 
 
 logger = logging.getLogger(__name__)
-async def get_sensor_data(request):
-    """API to fetch current sensor data."""
-    return JsonResponse(opc_client.data)
 
 async def get_weather_data(latitude, longitude):
     """Helper function to fetch weather data from Visual Crossing API"""
@@ -202,20 +199,6 @@ async def set_location(request):
             {'status': 'error', 'message': str(e)}, 
             status=500
         )
-    
-@csrf_exempt
-async def set_fan_speed(request):
-    """API to set the fan speed."""
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            value = data.get("fan_speed")
-            if value is not None:
-                opc_client.set_fan_speed(value)
-                return JsonResponse({"status": "success", "message": f"Fan speed set to {value}"})
-        except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)})
-    return JsonResponse({"status": "error", "message": "Invalid request"})
 
 
 async def dashboard_view(request):

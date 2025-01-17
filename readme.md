@@ -21,7 +21,13 @@ This project serves as an interface for monitoring and managing OPC UA servers v
 
 ---
 
-## Setup Instructions
+## Setup Instructions 
+### 0. The testing Server
+You have to do one thing and thats:
+```bash
+.\start.ps1
+```
+,now ignore the rest.
 ### 1. Remove Showcase Script
 The `server.py` file provided in the repository is for showcase purposes only. **Delete this file** to avoid confusion, and add the following lines to your code:
 
