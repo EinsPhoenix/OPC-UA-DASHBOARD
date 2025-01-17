@@ -106,10 +106,32 @@
                 </div>
             </div>
 
-            <div class="chart-card" id="energy-card">
+            <div class="chart-card hover-sound" id="currentLoad-card">
                 <div class="chart-title">Current Load</div>
                 <div class="chart-container">
                     <canvas id="currentLoad"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="loadModal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModal">&times;</span>
+                <h2>System Load Details</h2>
+                <div class="charts-grid">
+                    <div class="chart-card" id="currentCPULoad-card">
+                        <div class="chart-title">CPU-Load</div>
+                        <div class="chart-container">
+                            <canvas id="cpuLoad"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card" id="currentCPULoad-card">
+                        <div class="chart-title">Memory Load</div>
+                        <div class="chart-container">
+                            <canvas id="memoryLoad"></canvas>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

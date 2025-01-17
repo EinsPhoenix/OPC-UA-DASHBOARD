@@ -217,19 +217,34 @@ setInterval(updateCurrentPrice, 10000);
 
 
 let loadChartCurrent;
+let cpuLoadCurrent;
+let memoryLoadCurrent;
 initializeLoadGaugeCurrent();
 
 function initializeLoadGaugeCurrent() {
     const ctx = document.getElementById("currentLoad");
-    loadChartCurrent = new Chart(ctx, {
+    const cpuCtx = document.getElementById("cpuLoad");
+    const memoryCtx = document.getElementById("memoryLoad");
+
+
+    loadChartCurrent = chartInit(ctx, 'rgb(255, 115, 0)', "rgba(151, 48, 0, 0.82)", "%");
+    cpuLoadCurrent = chartInit(cpuCtx, 'rgb(255, 115, 0)', "rgba(151, 48, 0, 0.82)", "%");
+    memoryLoadCurrent = chartInit(memoryCtx, 'rgb(255, 115, 0)', "rgba(151, 48, 0, 0.82)", "%");
+}
+
+
+
+function chartInit(chatElement, forgroundColor, backgroundColor, suffix) {
+
+    return new Chart(chatElement, {
         type: 'doughnut',
         data: {
             labels: ['Load'],
             datasets: [{
                 data: [50, 50],
                 backgroundColor: [
-                    'rgb(255, 115, 0)',
-                    'rgba(151, 48, 0, 0.82)'
+                    forgroundColor,
+                    backgroundColor
                 ],
                 borderWidth: 0
             }]
@@ -257,22 +272,46 @@ function initializeLoadGaugeCurrent() {
                 ctx.clearRect(centerX - 50, centerY - 30, 100, 50);
 
                 ctx.font = 'bold 36px Inter, Arial';
-                ctx.fillStyle = 'rgb(255, 115, 0)';
+                ctx.fillStyle = forgroundColor;
                 ctx.textAlign = 'center';
-                ctx.fillText(`${currentLoad}%`, centerX, centerY);
+                ctx.fillText(`${currentLoad}${suffix}`, centerX, centerY);
             }
         }]
     });
+
 }
 
-function updateLoadGaugeCurrent(load) {
-    if (!loadChartCurrent) {
+const modal = document.getElementById("loadModal");
+const closeBtn = document.getElementById("closeModal");
+const energyCard = document.getElementById("currentLoad-card");
+
+energyCard.onclick = function () {
+    modal.style.display = "block";
+    modal.style.visibility = 'visible';
+    console.log("CLICK");
+
+}
+
+closeBtn.onclick = function () {
+    modal.style.display = 'none';
+}
+
+modal.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+
+
+
+function updateLoadGaugeCurrent(load, updateChart) {
+    if (!updateChart) {
         console.error('Chart ist nicht initialisiert');
         return;
     }
     const normalizedLoad = Math.min(Math.max(load, 0), 100);
-    loadChartCurrent.data.datasets[0].data = [normalizedLoad, 100 - normalizedLoad];
-    loadChartCurrent.update();
+    updateChart.data.datasets[0].data = [normalizedLoad, 100 - normalizedLoad];
+    updateChart.update();
 }
 
 async function updateCurrentLoad() {
@@ -281,7 +320,9 @@ async function updateCurrentLoad() {
         console.log(load);
 
         if (load.status === 'success') {
-            updateLoadGaugeCurrent(load.result.current_load);
+            updateLoadGaugeCurrent(load.result.current_load, loadChartCurrent);
+            updateLoadGaugeCurrent(load.result.cpu_usage, cpuLoadCurrent);
+            updateLoadGaugeCurrent(load.result.memory_usage, memoryLoadCurrent);
         } else {
             console.error('Failed to fetch load data');
         }

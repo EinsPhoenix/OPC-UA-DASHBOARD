@@ -333,6 +333,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .modal-content {
@@ -383,4 +384,10 @@
         text-align: center;
         margin-top: 20px;
         font-style: italic;
+    }
+
+
+    #loadModal {
+        display: 'none';
+        visibility: hidden;
     }

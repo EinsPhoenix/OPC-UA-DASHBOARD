@@ -229,7 +229,9 @@ async def load_request(request):
     combined_usage = (cpu_usage + memory_usage) / 2
     
     return JsonResponse({"status": "success", "result": {
-            "current_load": combined_usage
+            "current_load": combined_usage,
+            "memory_usage": memory_usage,
+            "cpu_usage": cpu_usage
         }})
 
 
