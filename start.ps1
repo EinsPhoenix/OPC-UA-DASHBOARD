@@ -9,7 +9,7 @@ if (Test-Path -Path "./venv") {
     python -m venv venv
   
     & ./venv/Scripts/activate
-
+}
 Write-Output "Installiere Abhängigkeiten aus requirements.txt..."
 pip install -r requirements.txt
 
