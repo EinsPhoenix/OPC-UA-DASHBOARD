@@ -9,6 +9,7 @@ This project serves as an interface for monitoring and managing OPC UA servers v
 2. [Setup Instructions](#setup-instructions)
 3. [Configuring the OPC UA Server](#configuring-the-opc-ua-server)
 4. [Running the Dashboard](#running-the-dashboard)
+5. [How to use the Dashboard](#how-to-use-the-dashboard)
 
 ---
 
