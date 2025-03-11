@@ -1,0 +1,26 @@
+mqtt-broker:
+    image: eclipse-mosquitto:2.0.15
+    container_name: mosquitto-broker
+    restart: unless-stopped
+    ports:
+      - "1883:1883" 
+      - "9001:9001" 
+    volumes:
+      - ./mqtt-broker/mosquitto/config:/mosquitto/config
+      - ./mqtt-broker/mosquitto/data:/mosquitto/data
+      - ./mqtt-broker/mosquitto/log:/mosquitto/log
+    environment:
+      - INITIAL_USER=admin
+      - INITIAL_PASSWORD=admin
+    entrypoint: |
+      sh -c 'chown mosquitto:mosquitto /mosquitto/config/pwfile;
+      if [ ! -s /mosquitto/config/pwfile ]; then
+        mosquitto_passwd -b -c /mosquitto/config/pwfile $${INITIAL_USER} $${INITIAL_PASSWORD};
+      fi;
+      exec /docker-entrypoint.sh mosquitto -c /mosquitto/config/mosquitto.conf'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

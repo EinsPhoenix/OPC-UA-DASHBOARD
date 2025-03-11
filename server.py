@@ -22,7 +22,7 @@ class SensorData(BaseModel):
     timestamps: List[str] = []
 
 class MQTTClientHandler:
-    def __init__(self, broker_address: str = "https://test.mosquitto.org", broker_port: int = 1883):
+    def __init__(self, broker_address: str = "192.168.50.58", broker_port: int = 1883):
         self.broker_address = broker_address
         self.broker_port = broker_port
         self.client = mqtt.Client(protocol=mqtt.MQTTv311)  
@@ -32,6 +32,7 @@ class MQTTClientHandler:
         self.setup_mqtt_client()
 
     def setup_mqtt_client(self):
+        self.client.username_pw_set("admin", "admin")
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.on_disconnect = self.on_disconnect
@@ -86,7 +87,7 @@ class MQTTClientHandler:
                 data_list.append(value)
                 self.data.timestamps.append(timestamp)
                 
-                # Keep only the last max_history values
+               
                 while len(data_list) > self.max_history:
                     data_list.pop(0)
                     self.data.timestamps.pop(0)
